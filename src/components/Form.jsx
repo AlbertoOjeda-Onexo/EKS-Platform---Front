@@ -1,12 +1,13 @@
 import api from "../api";
 import "../styles/Form.css"
+import Swal from 'sweetalert2'
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import LoadingIndicator from "./LoadingIndicator";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-function Form({ route, method }) {
+function Form({ route, method }) {    
     const [userName, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -14,13 +15,22 @@ function Form({ route, method }) {
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Registro";
-    
+
     useEffect(() => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
-        navigate("/");
+            try {
+            const decoded = jwtDecode(token);
+            const now = Date.now() / 1000;
+            if (decoded.exp > now) {
+                navigate("/");
+            }
+            } catch (error) {
+            console.log("Token inválido en Login, ignorando redirección");
+            }
         }
-    }, [navigate]);
+    }, []);
+
 
     const handleSubmit = async (e) => {
         setLoading(true);
@@ -38,7 +48,28 @@ function Form({ route, method }) {
                 navigate("/login")
             }
         } catch (error) {
-            alert(error)
+            console.log('Error al iniciar sesión: ', error.response.data.detail);
+            Swal.fire({
+                title: error.response.data.code,
+                text: error.response.data.detail,
+                icon: 'error',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#2859d3',
+                showClass: {
+                    popup: `
+                    animate__animated
+                    animate__fadeInUp
+                    animate__faster
+                    `
+                },
+                hideClass: {
+                    popup: `
+                    animate__animated
+                    animate__fadeOutDown
+                    animate__faster
+                    `
+                }
+            })            
         } finally {
             setLoading(false)
         }

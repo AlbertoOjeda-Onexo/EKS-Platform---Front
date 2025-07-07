@@ -2,29 +2,28 @@ import "../styles/Sidebar.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
-import { FaBars, FaUserCircle, FaHome } from "react-icons/fa";
+import { useSidebarStore } from "../store/sideBarStore";
+import { FaBars, FaUserCircle, FaHome, FaClipboardList } from "react-icons/fa";
 
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
-  const { user } = useUserStore();
-
-  const toggleSidebar = () => setCollapsed(!collapsed);
+  const { collapsed, toggleSidebar } = useSidebarStore();
+  const { user } = useUserStore();  
 
   return (
     <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
         <FaBars className="toggle-btn" onClick={toggleSidebar} />
-        {!collapsed && <span className="sidebar-title">EKS Assist</span>}
+        {!collapsed && <span className="sidebar-title">Capital Humano</span>}
       </div>
 
       <div className="sidebar-content">
         <Link to="/" className="sidebar-item">
-          <FaHome />
-          {!collapsed && <span>Inicio</span>}
+          <FaClipboardList/>
+          {!collapsed && <span>Vacantes</span>}
         </Link>
         <Link to="/dashboard" className="sidebar-item">
           <FaUserCircle />
-          {!collapsed && <span>Dashboard</span>}
+          {!collapsed && <span>Candidatos</span>}
         </Link>
       </div>
 

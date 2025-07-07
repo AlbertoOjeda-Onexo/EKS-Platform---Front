@@ -11,7 +11,13 @@
 }
 
 .layout-main {
-  flex-grow: 1; 
+  margin-left: 200px; 
   padding: 20px;
-  margin-left: 180px;   
+  flex: 1;
+  overflow-y: auto;  
+  transition: margin-left 0.3s ease;
+}
+
+.layout-main.collapsed {
+  margin-left: 50px; 
 }
