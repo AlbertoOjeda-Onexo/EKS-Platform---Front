@@ -1,0 +1,7 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Esto asegura que ocupe toda la altura de la pantalla */
+    width: 100%;
+}
