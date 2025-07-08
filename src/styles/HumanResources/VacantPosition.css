@@ -1,0 +1,240 @@
+.vacante-container {
+  width: 80vw;
+  margin: 0 auto;
+  padding-left: 2rem;
+  color: #333;
+}
+
+.vacante-header {
+  border-bottom: 2px solid #eaeaea;  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  margin-bottom: 5vh;
+}
+
+.vacante-container button {
+  background-color: #2859d3;
+  color: white;
+  border: none;  
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: fit-content;  
+  height: fit-content;
+}
+
+.vacante-container h4,
+.vacante-container h3,
+.vacante-container h2 {
+  color: #2859d3;  
+  font-size: 1.8rem;
+  border-bottom: 2px solid #eaeaea;  
+}
+
+.vacante-container h1 {
+  color: #2859d3;  
+  font-size: 1.8rem;  
+}
+
+.vacante-form {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0rem; 
+}
+
+.vacante-form textarea,
+.vacante-form input{
+  display: block;
+  width: 30%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.vacante-form select {
+  display: block;
+  width: 30%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.vacante-form input:focus,
+.vacante-form select:focus {
+  outline: none;
+  border-color: #2859d3;
+  box-shadow: 0 0 0 2px rgba(40, 89, 211, 0.2);
+}
+
+.vacante-form label {
+  display: flex;
+  width: 30%;
+  align-items: center;
+  margin: 1rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vacante-form input[type="checkbox"] {
+  width: auto;
+  width: 30%;
+  margin-right: 0.5rem;
+  margin-bottom: 0;
+}
+
+.vacante-form button {
+  background-color: #2859d3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 30%;
+  margin-top: 0rem;
+}
+
+.vacante-form button:hover {
+  background-color: #1e4bb6;
+}
+
+.form-basicos {
+  display: flex;
+  gap: 1.5rem;  
+}
+
+.form-dinamicos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center; /* <--- centra los elementos horizontalmente */
+}
+
+
+.form-dinamicos input,
+.form-dinamicos select,
+.form-dinamicos textarea,
+.form-dinamicos label {
+  width: 30%;
+  box-sizing: border-box;
+}
+
+.form-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0rem;
+  background-color: #f9f9f9;
+  cursor: default;
+}
+
+.form-button:hover {
+  background-color: transparent !important;
+}
+
+.form-button button {
+  background-color: #2859d3;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-button button:hover {
+  background-color: #f9f9f9;
+  color: #2859d3;
+  border: 1px solid #2859d3;
+}
+
+/* Tabla contenedor */
+.vacantes-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Encabezado */
+.vacantes-table thead {
+  background-color: #2859d3;
+  color: #ffffff;
+}
+
+.vacantes-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* Filas del cuerpo */
+.vacantes-table td {
+  padding: 0.9rem 1rem;
+  font-size: 0.9rem;
+  color: #333333;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* Hover en filas */
+.vacantes-table tbody tr:hover {
+  background-color: #f5f7fa;
+  cursor: pointer;
+}
+
+/* Alternar colores de fila */
+.vacantes-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Estilo para el status si lo deseas dinámico */
+.vacantes-table td:last-child {
+  font-weight: bold;
+}
+
+/* Base para todas las etiquetas */
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Colores según estado */
+.status-badge.pendiente {
+  background-color: #fff4cc;
+  color: #b38f00;
+  border: 1px solid #ffdf7e;
+}
+
+.status-badge.aprobada {
+  background-color: #d4f7d4;
+  color: #2b7a2b;
+  border: 1px solid #7dd87d;
+}
+
+.status-badge.cerrada {
+  background-color: #fce2e2;
+  color: #c0392b;
+  border: 1px solid #f5a6a6;
+}
+

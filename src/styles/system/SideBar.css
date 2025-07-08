@@ -65,3 +65,35 @@
   margin-right: 10px;
   margin-top: 3px;
 }
+
+
+/* Contenedor de subitems ahora en fila horizontal */
+.sidebar-subitems {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+/* Subitem individual en horizontal */
+.sidebar-subitem {
+  width: 80%;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;  
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-subitem:hover {
+  background-color: #1e293b;
+}
+
+.sidebar.collapsed .sidebar-subitems {
+  display: none;
+}

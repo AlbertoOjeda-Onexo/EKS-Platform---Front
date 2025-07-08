@@ -1,6 +1,6 @@
 import api from "../api";
-import "../styles/Form.css"
 import Swal from 'sweetalert2'
+import "../styles/system/Form.css"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
@@ -47,8 +47,7 @@ function Form({ route, method }) {
             } else {
                 navigate("/login")
             }
-        } catch (error) {
-            console.log('Error al iniciar sesión: ', error.response.data.detail);
+        } catch (error) {            
             Swal.fire({
                 title: error.response.data.code,
                 text: error.response.data.detail,
@@ -103,7 +102,7 @@ function Form({ route, method }) {
                 placeholder="Password"
             />
             {loading && <LoadingIndicator />}
-            <button className="form-button" type="submit">
+            <button className="form-button-register" type="submit">
                 {name}
             </button>
         </form>

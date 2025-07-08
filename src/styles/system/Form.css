@@ -24,7 +24,7 @@
   box-sizing: border-box;
 }
 
-.form-button {
+.form-button-register {
   width: 95%;
   padding: 10px;
   margin: 20px 0;
@@ -36,6 +36,6 @@
   transition: background-color 0.2s ease-in-out;
 }
 
-.form-button:hover {
+.form-button-register:hover {
   background-color: #0056b3;
 }

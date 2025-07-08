@@ -1,4 +1,4 @@
-import "../styles/PrivateLayout.css";
+import "../styles/system/PrivateLayout.css";
 import Header from "../components/Header";
 import Sidebar from "../components/SideBar";
 import { useSidebarStore } from "../store/sideBarStore"; 
