@@ -1,8 +1,9 @@
 import api from "../../api";
 import Swal from "sweetalert2";
-import "../../styles/HumanResources/CustomFields.css";
 import { FaTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { useUserStore } from "../../store/userStore";
+import "../../styles/HumanResources/CustomFields.css";
 
 const tipoCampoOptions = [
   { value: "text", label: "Texto" },
@@ -13,8 +14,8 @@ const tipoCampoOptions = [
 ];
 
 export default function CamposPersonalizadosPage() {
-
   const [campos, setCampos] = useState([]);
+  const { permissions } = useUserStore();
   const [nuevoCampo, setNuevoCampo] = useState({
     name: "",
     label: "",
@@ -185,26 +186,27 @@ export default function CamposPersonalizadosPage() {
 
   return (
     <div className="campos-container">
-      <div>
-        <h2>Campos Personalizados</h2>
-        <form className="campo-form" onSubmit={handleSubmit}>
-          <input name="name" placeholder="Nombre interno" value={nuevoCampo.name} onChange={handleChange} required />
-          <input name="label" placeholder="Etiqueta visible" value={nuevoCampo.label} onChange={handleChange} required />
-          <select name="type" value={nuevoCampo.type} onChange={handleChange}>
-            {tipoCampoOptions.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-          {nuevoCampo.type === "select" && (
-            <input name="options" placeholder="Opcion1, Opcion2, ..." value={nuevoCampo.options} onChange={handleChange} />
-          )}
-          <label>
-            <input type="checkbox" name="required" checked={nuevoCampo.required} onChange={handleChange} /> Obligatorio
-          </label>
-          <button type="submit">Crear campo</button>
-        </form>
-      </div>
-
+      {permissions.includes('crear_campo_dinamico') &&
+        <div>
+          <h2>Campos Personalizados</h2>
+          <form className="campo-form" onSubmit={handleSubmit}>
+            <input name="name" placeholder="Nombre interno" value={nuevoCampo.name} onChange={handleChange} required />
+            <input name="label" placeholder="Etiqueta visible" value={nuevoCampo.label} onChange={handleChange} required />
+            <select name="type" value={nuevoCampo.type} onChange={handleChange}>
+              {tipoCampoOptions.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            {nuevoCampo.type === "select" && (
+              <input name="options" placeholder="Opcion1, Opcion2, ..." value={nuevoCampo.options} onChange={handleChange} />
+            )}
+            <label>
+              <input type="checkbox" name="required" checked={nuevoCampo.required} onChange={handleChange} /> Obligatorio
+            </label>
+            <button type="submit">Crear campo</button>
+          </form>
+        </div>
+      }
       <div>
         <h2>Campos existentes</h2>
         <ul className="campos-lista">
@@ -213,9 +215,11 @@ export default function CamposPersonalizadosPage() {
               <div>
                 <strong className="truncate-label">{campo.label}</strong> ({campo.type}) {campo.required ? "*" : ""}
               </div>
-              <button className="icon-button" onClick={() => handleDelete(campo.idCustomField, campo.label)}>
-                <FaTrashAlt className="campos-icons" />
-              </button>
+              {permissions.includes('borrar_campo_dinamico') && 
+                <button className="icon-button" onClick={() => handleDelete(campo.idCustomField, campo.label)}>
+                  <FaTrashAlt className="campos-icons" />
+                </button>
+              }
             </li>
           ))}
         </ul>

@@ -1,10 +1,11 @@
-import "../styles/system/PrivateLayout.css";
 import Header from "../components/Header";
+import "../styles/system/PrivateLayout.css";
 import Sidebar from "../components/SideBar";
 import { useSidebarStore } from "../store/sideBarStore"; 
 
 function PrivateLayout({ children }) {
   const isCollapsed = useSidebarStore((state) => state.collapsed); 
+
   return (
     <div className="layout-root">
       <Header />

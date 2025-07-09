@@ -9,7 +9,7 @@ export const humanResourcesRoutes = [
   {
     path: "/customFields",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredPermission="ver_campos_dinamicos">
         <PrivateLayout>
           <CamposPersonalizadosPage />
         </PrivateLayout>
@@ -19,7 +19,7 @@ export const humanResourcesRoutes = [
   {
     path: "/vacantes/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredPermission="ver_vacantes">
         <PrivateLayout>
           <VacantPage />
         </PrivateLayout>
@@ -29,7 +29,7 @@ export const humanResourcesRoutes = [
   {
     path: "/vacantes/new",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredPermission="crear_vacante">
         <PrivateLayout>
           <CrearVacantePage />
         </PrivateLayout>

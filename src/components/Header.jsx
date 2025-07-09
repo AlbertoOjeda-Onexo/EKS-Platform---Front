@@ -26,8 +26,11 @@ function Header() {
     clearUser();
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(REFRESH_TOKEN);
-    navigate('/login');
+    setTimeout(() => {
+      navigate("/login");
+    }, 10); 
   };
+
 
   return (
     <header className="header">

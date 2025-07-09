@@ -2,10 +2,12 @@ import api from "../../api";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/userStore";
 import "../../styles/HumanResources/VacantPosition.css";
 
 export default function CrearVacantePage() {
     const navigate = useNavigate();
+    const { permissions } = useUserStore();
     const [campos, setCampos] = useState([]);
     const [valores, setValores] = useState({
         title: "",
@@ -174,7 +176,7 @@ export default function CrearVacantePage() {
             .map((campo) => renderCampo(campo))}
         </div>
         <div className="form-button">
-           <button type="submit">Guardar vacante</button>
+           {permissions.includes('crear_vacante') && <button type="submit">Guardar vacante</button>}
         </div>        
       </form>
     </div>
