@@ -27,7 +27,7 @@
 
 .campo-form input{
   display: block;
-  width: 91%;
+  width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid #ddd;
