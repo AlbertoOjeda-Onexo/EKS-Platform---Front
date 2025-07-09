@@ -8,7 +8,8 @@ export default function ModalInfo({ open, onClose, title, children }) {
       onCancel={onClose}
       footer={null}
       centered
-      className="modal-basico"
+      className="modal-basico"      
+      width={700}
     >
       <div className="modal-header">
         <h2>{title}</h2>

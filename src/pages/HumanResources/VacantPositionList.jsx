@@ -1,10 +1,12 @@
 import api from "../../api";
 import Swal from "sweetalert2";
+import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import { useUserStore } from "../../store/userStore";
+import LoadingAI from "../../components/LoadingAI";
 import { Dropdown, Menu, Button, Tag } from "antd";
 import ModalInfo from "../../components/ModalInfo";
+import { useUserStore } from "../../store/userStore";
 import "../../styles/HumanResources/VacantPosition.css";
 import DetalleVacante from "../../components/DetalleVacante";
 
@@ -12,8 +14,11 @@ export default function VacantePage() {
   const navigate = useNavigate();
   const { permissions } = useUserStore();
   const [vacantes, setVacantes] = useState([]);
-  const [openModalInfo, setOpenModalInfo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [vacanteDetail, setVacanteDetail] = useState([]);
+  const [openModalInfo, setOpenModalInfo] = useState(false);
+  const [vacantePublishment, setVacantePublishment] = useState('');  
+  const [openModalPublishment, setOpenModalPublishment] = useState(false);  
 
   const fetchVacantes = async () => {
     try {
@@ -185,17 +190,54 @@ export default function VacantePage() {
     }
   };
 
+  const handlePublishVacant = async (vacante) => {
+    setIsLoading(true);
+    try {
+      const generatedDescription = await api.get(`/humanResources/vacant_position/description_generator/${vacante.idVacantPosition}/`);
+      console.log('Generated Descrition: ', generatedDescription.data.text);
+      setVacanteDetail(vacante);
+      setVacantePublishment(generatedDescription.data.text);
+      setOpenModalPublishment(true);
+    } catch (error){
+        Swal.fire({
+            title: error.response.data.code,
+            text: error.response.data.detail,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2859d3',
+            showClass: {
+                popup: `
+                animate__animated
+                animate__fadeInUp
+                animate__faster
+                `
+            },
+            hideClass: {
+                popup: `
+                animate__animated
+                animate__fadeOutDown
+                animate__faster
+                `
+            }
+        })
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const renderAcciones = (vacante) => {
     const menu = (
       <Menu
         onClick={({ key }) => {
           if (key === "ver") handleViewDetail(vacante);          
+          if (key === "publicar") handlePublishVacant(vacante);
           if (key === 'aprobar') handleApprove(vacante.idVacantPosition);
           if (key === "eliminar") handleDelete(vacante.idVacantPosition);
         }}
         items={[
-          { label: "Ver", key: "ver" },        
-          permissions.includes('aprobar_vacante') &&  { label: "Aprobar", key: "aprobar" },          
+          { label: "Ver", key: "ver" }, 
+          permissions.includes('publicar_vacante') && vacante.status == 'aprobada' && { label: "Publicar", key: "publicar"},           
+          permissions.includes('aprobar_vacante') && { label: "Aprobar", key: "aprobar" },          
           permissions.includes('eliminar_vacante') && { label: "Eliminar", key: "eliminar", danger: true }
         ]}
       />
@@ -213,7 +255,7 @@ export default function VacantePage() {
   }, []);
 
   return (
-    <>
+    <>    
     <div className="vacante-container">
       <div className="vacante-header">
         <h1 className="header-title">Vacantes</h1>
@@ -249,6 +291,12 @@ export default function VacantePage() {
     <ModalInfo open={openModalInfo} onClose={() => setOpenModalInfo(false)} title={vacanteDetail.title}>
       <DetalleVacante vacante={vacanteDetail} />
     </ModalInfo>
+    <ModalInfo open={openModalPublishment} onClose={() => setOpenModalPublishment(false)} title={vacanteDetail.title}>
+        <div className="modal-publishment-content">
+          <ReactMarkdown>{vacantePublishment}</ReactMarkdown>
+        </div>
+    </ModalInfo>
+    {isLoading && <LoadingAI/>}
     </>
   );
 }
