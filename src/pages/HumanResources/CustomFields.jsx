@@ -26,7 +26,7 @@ export default function CamposPersonalizadosPage() {
 
   const fetchCampos = async () => {
     try {
-      const res = await api.get("/humanResources/custom_fields/");
+      const res = await api.get("/humanResources/vacant_position/custom_fields/");
       setCampos(res.data);
     } catch (err) {
       console.error("Error al cargar campos personalizados", err);
@@ -46,7 +46,7 @@ export default function CamposPersonalizadosPage() {
     try {
       const payload = { ...nuevoCampo };
       if (payload.tipo !== "select") delete payload.opciones;
-      const res = await api.post("/humanResources/custom_fields/", payload); 
+      const res = await api.post("/humanResources/vacant_position/custom_fields/", payload); 
       Swal.fire({
           title: 'Campo creado',
           text: 'El campo fue agregado exitosamente.',
@@ -130,7 +130,7 @@ export default function CamposPersonalizadosPage() {
 
     if (result.isConfirmed) {      
       try {
-        await api.delete(`/humanResources/custom_fields/${id}/delete/`);
+        await api.delete(`/humanResources/vacant_position/custom_fields/${id}/delete/`);
         Swal.fire({
             title: 'Campo eliminado.',
             text: 'El campo fue eliminado exitosamente',

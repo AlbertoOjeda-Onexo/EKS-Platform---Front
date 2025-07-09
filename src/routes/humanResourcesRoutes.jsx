@@ -4,6 +4,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import VacantPage from "../pages/HumanResources/VacantPositionList"
 import CrearVacantePage from "../pages/HumanResources/VacantPositionNew";
 import CamposPersonalizadosPage from "../pages/HumanResources/CustomFields";
+import CandidatoPage from "../pages/HumanResources/CandidateList"
 
 export const humanResourcesRoutes = [
   {
@@ -12,6 +13,26 @@ export const humanResourcesRoutes = [
       <ProtectedRoute requiredPermission="ver_campos_dinamicos">
         <PrivateLayout>
           <CamposPersonalizadosPage />
+        </PrivateLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/candidatos/",
+    element: (
+      <ProtectedRoute requiredPermission="ver_candidatos">
+        <PrivateLayout>
+          <CandidatoPage />
+        </PrivateLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/candidatos/new",
+    element: (
+      <ProtectedRoute requiredPermission="crear_candidato">
+        <PrivateLayout>
+          <CrearVacantePage />
         </PrivateLayout>
       </ProtectedRoute>
     ),

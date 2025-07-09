@@ -3,7 +3,7 @@ import "../styles/system/Sidebar.css";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 import { useSidebarStore } from "../store/sideBarStore";
-import { FaBars, FaUserCircle, FaClipboardList, FaAngleDown, FaBriefcase } from "react-icons/fa";
+import { FaBars, FaUserCircle, FaClipboardList, FaAngleDown, FaBriefcase, FaFolderOpen } from "react-icons/fa";
 
 export default function Sidebar() {
   const { collapsed, toggleSidebar } = useSidebarStore();
@@ -43,9 +43,13 @@ export default function Sidebar() {
                 <span>Formulario</span>
               </Link>
               <Link to="/vacantes" className="sidebar-subitem">
-                <FaUserCircle style={{ marginRight: "6px" }}/>
+                <FaFolderOpen style={{ marginRight: "6px" }}/>
                 <span>Vacantes</span>
               </Link>
+              <Link to="/candidatos" className="sidebar-subitem">
+                <FaUserCircle style={{ marginRight: "6px" }}/>
+                <span>Candidatos</span>
+              </Link>              
             </div>
           )}
         </div>

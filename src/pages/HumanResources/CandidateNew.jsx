@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/userStore";
 import "../../styles/HumanResources/VacantPosition.css";
 
-export default function CrearVacantePage() {
+export default function CrearCandidatoPage() {
     const navigate = useNavigate();
     const { permissions } = useUserStore();
     const [campos, setCampos] = useState([]);
