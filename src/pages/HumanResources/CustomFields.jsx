@@ -209,7 +209,7 @@ export default function CamposPersonalizadosPage() {
       
       <div className="campos-content">
         {permissions.includes('crear_campo_dinamico') &&
-          <div className="campos-form-section">
+          <div className="campos-form-section" style={{width: '20vw'}}>
             <h2>Campos Personalizados</h2>
             <form className="campo-form" onSubmit={handleSubmit}>
               <input name="name" placeholder="Nombre interno" value={nuevoCampo.name} onChange={handleChange} required />
@@ -230,7 +230,7 @@ export default function CamposPersonalizadosPage() {
           </div>
         }
         
-        <div className="campos-list-section">
+        <div className="campos-list-section" style={{width: '57vw'}}>
           <h2>Campos existentes</h2>
           <ul className="campos-lista">
             {campos.map((campo) => (

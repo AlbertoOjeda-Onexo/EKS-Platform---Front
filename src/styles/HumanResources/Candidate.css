@@ -226,13 +226,13 @@
   border: 1px solid #ffdf7e;
 }
 
-.status-badge.aprobada {
+.status-badge.aprobado {
   background-color: #d4f7d4;
   color: #2b7a2b;
   border: 1px solid #7dd87d;
 }
 
-.status-badge.cerrada {
+.status-badge.rechazado {
   background-color: #fce2e2;
   color: #c0392b;
   border: 1px solid #f5a6a6;
