@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 import LoadingAI from "../../components/system/LoadingAI";
 import { Dropdown, Menu, Button, Tag } from "antd";
 import ModalInfo from "../../components/HumanResources/ModalInfo";
+import ModalAction from "../../components/HumanResources/ModalAction";
 import { useUserStore } from "../../store/userStore";
 import "../../styles/HumanResources/VacantPosition.css";
 import DetalleVacante from "../../components/HumanResources/DetalleVacante";
+import DetalleVacanteCheckList from "../../components/HumanResources/DetalleVacanteChecklist";
 
 export default function VacantePage() {
   const navigate = useNavigate();
@@ -19,11 +21,16 @@ export default function VacantePage() {
   const [openModalInfo, setOpenModalInfo] = useState(false);
   const [vacantePublishment, setVacantePublishment] = useState('');  
   const [openModalPublishment, setOpenModalPublishment] = useState(false);  
+  const [openModalChecklist, setOpenModalChecklist] = useState(false);
 
   const fetchVacantes = async () => {
     try {
       const res = await api.get("/humanResources/vacant_position/");
       setVacantes(res.data);
+      if (vacanteDetail){
+        const updated = res.data.find(vacante => vacante.idVacantPosition === vacanteDetail.idVacantPosition);
+        if (updated) setVacanteDetail(updated);
+      }
     } catch (err) {
       console.error("Error al cargar las vacantes disponibles", err);
     }
@@ -225,6 +232,37 @@ export default function VacantePage() {
     }
   };
 
+  const handleChecklist = async (vacante) => {
+    try {      
+      setVacanteDetail(vacante);      
+      setOpenModalChecklist(true);
+    } catch (error) {
+        Swal.fire({
+            title: error.response.data.code,
+            text: error.response.data.detail,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2859d3',
+            showClass: {
+                popup: `
+                animate__animated
+                animate__fadeInUp
+                animate__faster
+                `
+            },
+            hideClass: {
+                popup: `
+                animate__animated
+                animate__fadeOutDown
+                animate__faster
+                `
+            }
+        })
+    } finally {
+
+    }
+  };
+
   const renderAcciones = (vacante) => {
     const menu = (
       <Menu
@@ -232,12 +270,14 @@ export default function VacantePage() {
           if (key === "ver") handleViewDetail(vacante);          
           if (key === "publicar") handlePublishVacant(vacante);
           if (key === 'aprobar') handleApprove(vacante.idVacantPosition);
+          if (key === 'checklist') handleChecklist(vacante);
           if (key === "eliminar") handleDelete(vacante.idVacantPosition);
         }}
         items={[
           { label: "Ver", key: "ver" }, 
           permissions.includes('publicar_vacante') && vacante.status == 'aprobada' && { label: "Publicar", key: "publicar"},           
-          permissions.includes('aprobar_vacante') && { label: "Aprobar", key: "aprobar" },          
+          permissions.includes('aprobar_vacante') && vacante.status !== 'aprobada' && { label: "Aprobar", key: "aprobar" },        
+          permissions.includes('aprobar_vacante') && vacante.status == 'aprobada' && { label: "Checklist", key: "checklist"},  
           permissions.includes('eliminar_vacante') && { label: "Eliminar", key: "eliminar", danger: true }
         ]}
       />
@@ -256,47 +296,50 @@ export default function VacantePage() {
 
   return (
     <>    
-    <div className="vacante-container">
-      <div className="vacante-header">
-        <h1 className="header-title">Vacantes</h1>
-        {permissions.includes('crear_vacante') && <button onClick={handleNew}>Agregar Vacante</button>}
-      </div>
-      <table className="vacantes-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Fecha Vencimiento</th>
-            <th>Status</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vacantes?.map((vacante, index) => (
-            <tr key={index}>
-              <td>{vacante.title}</td>
-              <td>{vacante.description}</td>
-              <td>{vacante.expire_date}</td>
-              <td>
-                <span className={`status-badge ${vacante.status.toLowerCase()}`}>
-                  {vacante.status}                  
-                </span>                
-              </td>
-              <td>{renderAcciones(vacante)}</td>
+      <div className="vacante-container">
+        <div className="vacante-header">
+          <h1 className="header-title">Vacantes</h1>
+          {permissions.includes('crear_vacante') && <button onClick={handleNew}>Agregar Vacante</button>}
+        </div>
+        <table className="vacantes-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Fecha Vencimiento</th>
+              <th>Status</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <ModalInfo open={openModalInfo} onClose={() => setOpenModalInfo(false)} title={vacanteDetail.title}>
-      <DetalleVacante vacante={vacanteDetail} />
-    </ModalInfo>
-    <ModalInfo open={openModalPublishment} onClose={() => setOpenModalPublishment(false)} title={vacanteDetail.title}>
-        <div className="modal-publishment-content">
+          </thead>
+          <tbody>
+            {vacantes?.map((vacante, index) => (
+              <tr key={index}>
+                <td>{vacante.title}</td>
+                <td>{vacante.description}</td>
+                <td>{vacante.expire_date}</td>
+                <td>
+                  <span className={`status-badge ${vacante.status.toLowerCase()}`}>
+                    {vacante.status}                  
+                  </span>                
+                </td>
+                <td>{renderAcciones(vacante)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ModalInfo open={openModalInfo} onClose={() => setOpenModalInfo(false)} title={vacanteDetail.title}>
+        <DetalleVacante vacante={vacanteDetail} />
+      </ModalInfo>
+      <ModalInfo open={openModalPublishment} onClose={() => setOpenModalPublishment(false)} title={vacanteDetail.title}>
+        <div className="modal-content">
           <ReactMarkdown>{vacantePublishment}</ReactMarkdown>
         </div>
-    </ModalInfo>
-    {isLoading && <LoadingAI/>}
+      </ModalInfo>
+      <ModalInfo open={openModalChecklist} onClose={() => setOpenModalChecklist(false)} title={vacanteDetail.title}>
+        <DetalleVacanteCheckList vacante={vacanteDetail} vacantes={vacantes} fetchVacantes={fetchVacantes}/>
+      </ModalInfo>     
+      {isLoading && <LoadingAI/>}
     </>
   );
 }

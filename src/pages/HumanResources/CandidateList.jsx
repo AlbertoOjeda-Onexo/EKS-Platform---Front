@@ -198,7 +198,7 @@ export default function CandidatoPage() {
         }}
         items={[
           { label: "Ver", key: "ver" },           
-          permissions.includes('aceptar_candidato') && { label: "Aceptar", key: "aceptar" },          
+          permissions.includes('aceptar_candidato') && candidato.status !== 'aprobado' && { label: "Aceptar", key: "aceptar" },          
           permissions.includes('eliminar_candidato') && { label: "Eliminar", key: "eliminar", danger: true }
         ]}
       />
