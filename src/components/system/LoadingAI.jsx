@@ -1,5 +1,5 @@
 // src/components/LoadingAI.jsx
-import "../styles/Components/LoadingAI.css";
+import "../../styles/Components/LoadingAI.css";
 
 export default function LoadingAI() {
   return (

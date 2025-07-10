@@ -1,26 +1,39 @@
 import api from "../../api";
+import { Select } from 'antd';
 import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/userStore";
-import "../../styles/HumanResources/VacantPosition.css";
+import "../../styles/HumanResources/Candidate.css";
 
 export default function CrearCandidatoPage() {
     const navigate = useNavigate();
     const { permissions } = useUserStore();
     const [campos, setCampos] = useState([]);
+    const [vacantes, setVacantes] = useState([]);
     const [valores, setValores] = useState({
-        title: "",
-        description: "",
-        expire_date: ""
+        name: "",
+        firstSurName: "",
+        secondSurName: "",
+        idVacantPosition: ""
     });
 
     const fetchCampos = async () => {
         try {
-            const res = await api.get("/humanResources/vacant_position/custom_fields/");
+            const res = await api.get("/humanResources/candidate/custom_fields/");
             setCampos(res.data);
         } catch (err) {
             console.error("Error al cargar campos personalizados", err);
+        }
+    };
+
+    const fetchVacantes = async () => {
+        try {
+        const res = await api.get("/humanResources/vacant_position/");
+        setVacantes(res.data);
+        } catch (err) {
+        console.error("Error al cargar las vacantes disponibles", err);
         }
     };
 
@@ -34,6 +47,39 @@ export default function CrearCandidatoPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const camposBasicos = [
+            { key: 'name', label: 'Nombre' },
+            { key: 'firstSurName', label: 'Apellido Paterno' },
+            { key: 'secondSurName', label: 'Apellido Materno' }
+        ];
+
+        const esCampoVacio = (valor, tipo) => {
+            if (tipo === 'date') {
+                return valor === null || valor === undefined || valor === '';
+            }
+            return !valor;
+        };
+        
+        for (const campo of camposBasicos) {
+            if (esCampoVacio(valores[campo.key], campo.type)) {
+                toast.error(`Por favor, ingresa el campo: ${campo.label}`);
+                return; 
+            }
+        }
+
+        for (const campo of campos) {
+            if (campo.required && esCampoVacio(valores[campo.name], campo.type)) {
+                toast.error(`Campo obligatorio: ${campo.label}`);
+                return; 
+            }
+        }
+        
+        if (!valores.idVacantPosition) {
+            toast.error("Por favor selecciona una vacante.");
+            return;
+        }
+
         try {
 
             const customFields = campos.map((campo) => {
@@ -50,17 +96,18 @@ export default function CrearCandidatoPage() {
             });
 
             const payload = {
-                title: valores.title,
-                description: valores.description,
-                expire_date: valores.expire_date,
+                name: valores.name,
+                firstSurName: valores.firstSurName,
+                secondSurName: valores.secondSurName,
+                idVacantPosition: valores.idVacantPosition,
                 status: 'pendiente',
                 valores_dinamicos: customFields
             };
 
-            const res = await api.post("/humanResources/vacant_position/", payload);
+            const res = await api.post("/humanResources/candidate/", payload);
             const result = await Swal.fire({
-                title: 'Vacante creada',
-                text: 'La vacante fue agregada exitosamente.',
+                title: 'Candidato agregado',
+                text: 'El candidato fue registrado exitosamente.',
                 icon: 'success',
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#2859d3',
@@ -80,7 +127,7 @@ export default function CrearCandidatoPage() {
                 }
             })  
             if (result.isConfirmed){
-                navigate('/vacantes');
+                navigate('/candidatos');
             }                        
         } catch (error) {
             Swal.fire({
@@ -146,24 +193,36 @@ export default function CrearCandidatoPage() {
             type={campo.type}
             placeholder={campo.label}
             value={valores[campo.name] || ""}
-            onChange={handleChange}
-            required={campo.required}
+            onChange={handleChange}            
             />
         );
     };
 
     useEffect(() => {
         fetchCampos();
+        fetchVacantes();
     }, []);
 
   return (
-    <div className="vacante-container">
-      <h2>Crear Vacante</h2>
-      <form className="vacante-form" onSubmit={handleSubmit}>
+    <div className="candidate-container">
+      <h2>Agregar Candidato</h2>
+      <form className="candidate-form" onSubmit={handleSubmit}>
         <div className="form-basicos">
-          <input name="title" placeholder="Título" value={valores.title} onChange={handleChange} required />
-          <textarea name="description" rows="1" placeholder="Descripción" value={valores.description} onChange={handleChange} required />
-          <input type="date" name="expire_date" value={valores.expire_date} onChange={handleChange} required />
+            <input name="name" placeholder="Nombre" value={valores.name} onChange={handleChange}  />
+            <input name="firstSurName" placeholder="Apellido Paterno" value={valores.firstSurName} onChange={handleChange}  />
+            <input name="secondSurName" placeholder="Apellido Materno" value={valores.secondSurName} onChange={handleChange}  />
+            <Select
+                showSearch
+                className="search-select"
+                placeholder="Seleccione una vacante"
+                optionFilterProp="label"
+                value={valores.idVacantPosition || undefined}
+                onChange={(value) => setValores({ ...valores, idVacantPosition: value })}
+                options={vacantes.map((vacante) => ({
+                value: vacante.idVacantPosition,
+                label: vacante.title                
+                }))}
+            />
         </div>
 
         <h4>Detalles</h4>
@@ -176,7 +235,7 @@ export default function CrearCandidatoPage() {
             .map((campo) => renderCampo(campo))}
         </div>
         <div className="form-button">
-           {permissions.includes('crear_vacante') && <button type="submit">Guardar vacante</button>}
+           {permissions.includes('crear_candidato') && <button type="submit">Guardar Candidato</button>}
         </div>        
       </form>
     </div>

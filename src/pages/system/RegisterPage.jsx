@@ -1,4 +1,4 @@
-import Form from "../../components/Form"
+import Form from "../../components/system/Form"
 
 function Register() {
     return <Form route="/user/auth/register/" method="register" />

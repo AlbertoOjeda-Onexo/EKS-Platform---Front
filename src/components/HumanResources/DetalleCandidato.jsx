@@ -1,8 +1,8 @@
 import { Descriptions, Divider, Tag } from "antd";
-import "../styles/Components/DetalleVacante.css";
+import "../../styles/Components/DetalleCandidato.css";
 
-export default function DetalleVacante({ vacante }) {
-  if (!vacante) return null;
+export default function DetalleCandidato({ candidato }) {
+  if (!candidato) return null;
 
   const renderValor = (valor) => {
     if (valor === "true") return <Tag color="green">Sí</Tag>;
@@ -18,17 +18,17 @@ export default function DetalleVacante({ vacante }) {
         size="small"
         column={1}
       >
-        <Descriptions.Item label="Título">
-          {vacante.title}
+        <Descriptions.Item label="Nombre">
+          {candidato.name}
         </Descriptions.Item>
-        <Descriptions.Item label="Descripción">
-          {vacante.description}
+        <Descriptions.Item label="Apellidos">
+          {candidato.firstSurName + ' ' + candidato.secondSurName}
         </Descriptions.Item>
-        <Descriptions.Item label="Fecha de Expiración">
-          {vacante.expire_date}
+        <Descriptions.Item label="Vacante">
+          {candidato.vacantPositionTitle}
         </Descriptions.Item>
         <Descriptions.Item label="Estado">
-          <Tag color="blue">{vacante.status}</Tag>
+          <Tag color="blue">{candidato.status}</Tag>
         </Descriptions.Item>
       </Descriptions>
 
@@ -36,7 +36,7 @@ export default function DetalleVacante({ vacante }) {
 
       <div className="campos-personalizados-scroll">
         <Descriptions bordered size="small" column={1}>
-          {vacante.valores_dinamicos?.map((campo) => (
+          {candidato.valores_dinamicos?.map((campo) => (
             <Descriptions.Item key={campo.fieldID} label={campo.fieldName}>
               {renderValor(campo.value)}
             </Descriptions.Item>

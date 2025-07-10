@@ -1,6 +1,6 @@
-import Header from "../components/Header";
+import Header from "../components/system/Header";
 import "../styles/system/PrivateLayout.css";
-import Sidebar from "../components/SideBar";
+import Sidebar from "../components/system/SideBar";
 import { useSidebarStore } from "../store/sideBarStore"; 
 
 function PrivateLayout({ children }) {

@@ -1,8 +1,8 @@
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import { useUserStore } from "../store/userStore";
+import { REFRESH_TOKEN, ACCESS_TOKEN } from "../../constants";
+import { useUserStore } from "../../store/userStore";
 import axios from "axios";
 
 function ProtectedRoute({ children, requiredPermission = null }) {

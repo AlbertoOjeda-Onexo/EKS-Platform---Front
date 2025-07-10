@@ -1,11 +1,11 @@
-import api from "../api";
+import api from "../../api";
 import Swal from 'sweetalert2'
-import "../styles/system/Form.css"
+import "../../styles/system/Form.css"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../store/userStore";
+import { useUserStore } from "../../store/userStore";
 import LoadingIndicator from "./LoadingIndicator";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 function Form({ route, method }) {    
     const [userName, setUsername] = useState("");

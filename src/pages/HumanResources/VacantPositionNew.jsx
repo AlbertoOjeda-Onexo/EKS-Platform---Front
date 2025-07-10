@@ -1,5 +1,6 @@
 import api from "../../api";
 import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/userStore";
@@ -34,6 +35,34 @@ export default function CrearVacantePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const camposBasicos = [
+            { key: 'title', label: 'Título' },
+            { key: 'description', label: 'Descripción' },
+            { key: 'date', label: 'Fecha Límite', type: 'date' }
+        ];
+        
+        const esCampoVacio = (valor, tipo) => {
+            if (tipo === 'date') {
+                return valor === null || valor === undefined || valor === '';
+            }
+            return !valor;
+        };
+        
+        for (const campo of camposBasicos) {
+            if (esCampoVacio(valores[campo.key], campo.type)) {
+                toast.error(`Por favor, ingresa el campo: ${campo.label}`);
+                return; 
+            }
+        }
+
+        for (const campo of campos) {
+            if (campo.required && esCampoVacio(valores[campo.name], campo.type)) {
+                toast.error(`Campo obligatorio: ${campo.label}`);
+                return; 
+            }
+        }
+
         try {
 
             const customFields = campos.map((campo) => {
@@ -146,8 +175,7 @@ export default function CrearVacantePage() {
             type={campo.type}
             placeholder={campo.label}
             value={valores[campo.name] || ""}
-            onChange={handleChange}
-            required={campo.required}
+            onChange={handleChange}            
             />
         );
     };
@@ -161,9 +189,9 @@ export default function CrearVacantePage() {
       <h2>Crear Vacante</h2>
       <form className="vacante-form" onSubmit={handleSubmit}>
         <div className="form-basicos">
-          <input name="title" placeholder="Título" value={valores.title} onChange={handleChange} required />
-          <textarea name="description" rows="1" placeholder="Descripción" value={valores.description} onChange={handleChange} required />
-          <input type="date" name="expire_date" value={valores.expire_date} onChange={handleChange} required />
+          <input name="title" placeholder="Título" value={valores.title} onChange={handleChange} />
+          <textarea name="description" rows="1" placeholder="Descripción" value={valores.description} onChange={handleChange} />
+          <input type="date" name="expire_date" value={valores.expire_date} onChange={handleChange} />
         </div>
 
         <h4>Detalles</h4>

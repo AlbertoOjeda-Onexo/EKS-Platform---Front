@@ -1,10 +1,11 @@
 import React from "react";
 import PrivateLayout from "../layouts/PrivateLayout";
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedRoute from "../components/system/ProtectedRoute";
 import VacantPage from "../pages/HumanResources/VacantPositionList"
 import CrearVacantePage from "../pages/HumanResources/VacantPositionNew";
 import CamposPersonalizadosPage from "../pages/HumanResources/CustomFields";
 import CandidatoPage from "../pages/HumanResources/CandidateList"
+import CrearCandidatoPage from "../pages/HumanResources/CandidateNew";
 
 export const humanResourcesRoutes = [
   {
@@ -32,7 +33,7 @@ export const humanResourcesRoutes = [
     element: (
       <ProtectedRoute requiredPermission="crear_candidato">
         <PrivateLayout>
-          <CrearVacantePage />
+          <CrearCandidatoPage />
         </PrivateLayout>
       </ProtectedRoute>
     ),

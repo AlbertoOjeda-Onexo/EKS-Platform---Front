@@ -1,0 +1,14 @@
+.campos-personalizados-scroll {
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.campos-personalizados-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.campos-personalizados-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(40, 89, 211, 0.4);
+  border-radius: 4px;
+}

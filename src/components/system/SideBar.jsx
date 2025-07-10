@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "../styles/system/Sidebar.css";
+import "../../styles/system/Sidebar.css";
 import { Link } from "react-router-dom";
-import { useUserStore } from "../store/userStore";
-import { useSidebarStore } from "../store/sideBarStore";
+import { useUserStore } from "../../store/userStore";
+import { useSidebarStore } from "../../store/sideBarStore";
 import { FaBars, FaUserCircle, FaClipboardList, FaAngleDown, FaBriefcase, FaFolderOpen } from "react-icons/fa";
 
 export default function Sidebar() {

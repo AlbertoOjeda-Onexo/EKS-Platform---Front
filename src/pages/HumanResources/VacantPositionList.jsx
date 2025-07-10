@@ -3,12 +3,12 @@ import Swal from "sweetalert2";
 import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import LoadingAI from "../../components/LoadingAI";
+import LoadingAI from "../../components/system/LoadingAI";
 import { Dropdown, Menu, Button, Tag } from "antd";
-import ModalInfo from "../../components/ModalInfo";
+import ModalInfo from "../../components/HumanResources/ModalInfo";
 import { useUserStore } from "../../store/userStore";
 import "../../styles/HumanResources/VacantPosition.css";
-import DetalleVacante from "../../components/DetalleVacante";
+import DetalleVacante from "../../components/HumanResources/DetalleVacante";
 
 export default function VacantePage() {
   const navigate = useNavigate();

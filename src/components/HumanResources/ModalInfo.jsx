@@ -1,5 +1,5 @@
 import { Modal, Button } from "antd";
-import "../styles/Components/ModalInfo.css";
+import "../../styles/Components/ModalInfo.css";
 
 export default function ModalInfo({ open, onClose, title, children }) {
   return (
