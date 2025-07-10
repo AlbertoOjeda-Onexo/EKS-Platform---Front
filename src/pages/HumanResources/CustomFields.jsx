@@ -1,4 +1,5 @@
 import api from "../../api";
+import { Select } from "antd";
 import Swal from "sweetalert2";
 import { FaTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ const tipoCampoOptions = [
 
 export default function CamposPersonalizadosPage() {
   const [campos, setCampos] = useState([]);
+  const [formType, setFormType] = useState('vacant_position');
   const { permissions } = useUserStore();
   const [nuevoCampo, setNuevoCampo] = useState({
     name: "",
@@ -26,7 +28,7 @@ export default function CamposPersonalizadosPage() {
 
   const fetchCampos = async () => {
     try {
-      const res = await api.get("/humanResources/vacant_position/custom_fields/");
+      const res = await api.get(`/humanResources/${formType}/custom_fields/`);
       setCampos(res.data);
     } catch (err) {
       console.error("Error al cargar campos personalizados", err);
@@ -44,9 +46,8 @@ export default function CamposPersonalizadosPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = { ...nuevoCampo };
-      if (payload.tipo !== "select") delete payload.opciones;
-      const res = await api.post("/humanResources/vacant_position/custom_fields/", payload); 
+      const payload = { ...nuevoCampo };      
+      const res = await api.post(`/humanResources/${formType}/custom_fields/`, payload); 
       Swal.fire({
           title: 'Campo creado',
           text: 'El campo fue agregado exitosamente.',
@@ -130,7 +131,7 @@ export default function CamposPersonalizadosPage() {
 
     if (result.isConfirmed) {      
       try {
-        await api.delete(`/humanResources/vacant_position/custom_fields/${id}/delete/`);
+        await api.delete(`/humanResources/${formType}/custom_fields/${id}/delete/`);
         Swal.fire({
             title: 'Campo eliminado.',
             text: 'El campo fue eliminado exitosamente',
@@ -181,48 +182,71 @@ export default function CamposPersonalizadosPage() {
   };
 
   useEffect(() => {
+    if(formType){
+      fetchCampos();
+    }
+  }, [formType]);
+
+  useEffect(() => {
     fetchCampos();
   }, []);
 
   return (
     <div className="campos-container">
-      {permissions.includes('crear_campo_dinamico') &&
-        <div>
-          <h2>Campos Personalizados</h2>
-          <form className="campo-form" onSubmit={handleSubmit}>
-            <input name="name" placeholder="Nombre interno" value={nuevoCampo.name} onChange={handleChange} required />
-            <input name="label" placeholder="Etiqueta visible" value={nuevoCampo.label} onChange={handleChange} required />
-            <select name="type" value={nuevoCampo.type} onChange={handleChange}>
-              {tipoCampoOptions.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-            {nuevoCampo.type === "select" && (
-              <input name="options" placeholder="Opcion1, Opcion2, ..." value={nuevoCampo.options} onChange={handleChange} />
-            )}
-            <label>
-              <input type="checkbox" name="required" checked={nuevoCampo.required} onChange={handleChange} /> Obligatorio
-            </label>
-            <button type="submit">Crear campo</button>
-          </form>
+      <div className="campos-header">
+        <h1 style={{marginRight: '15px'}}>Formulario de: </h1>
+        <Select 
+          value={formType}
+          onChange={setFormType}
+          style={{ width: 200 }}
+          className="search-select"
+          options={[
+            { value: "vacant_position", label: "Vacantes" },
+            { value: "candidate", label: "Candidatos" }
+          ]}
+        />
+      </div>
+      
+      <div className="campos-content">
+        {permissions.includes('crear_campo_dinamico') &&
+          <div className="campos-form-section">
+            <h2>Campos Personalizados</h2>
+            <form className="campo-form" onSubmit={handleSubmit}>
+              <input name="name" placeholder="Nombre interno" value={nuevoCampo.name} onChange={handleChange} required />
+              <input name="label" placeholder="Etiqueta visible" value={nuevoCampo.label} onChange={handleChange} required />
+              <select name="type" value={nuevoCampo.type} onChange={handleChange}>
+                {tipoCampoOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              {nuevoCampo.type === "select" && (
+                <input name="options" placeholder="Opcion1, Opcion2, ..." value={nuevoCampo.options} onChange={handleChange} />
+              )}
+              <label>
+                <input type="checkbox" name="required" checked={nuevoCampo.required} onChange={handleChange} /> Obligatorio
+              </label>
+              <button type="submit">Crear campo</button>
+            </form>
+          </div>
+        }
+        
+        <div className="campos-list-section">
+          <h2>Campos existentes</h2>
+          <ul className="campos-lista">
+            {campos.map((campo) => (
+              <li key={campo.idCustomField}>
+                <div>
+                  <strong className="truncate-label">{campo.label}</strong> ({campo.type}) {campo.required ? "*" : ""}
+                </div>
+                {permissions.includes('borrar_campo_dinamico') && 
+                  <button className="icon-button" onClick={() => handleDelete(campo.idCustomField, campo.label)}>
+                    <FaTrashAlt className="campos-icons" />
+                  </button>
+                }
+              </li>
+            ))}
+          </ul>
         </div>
-      }
-      <div>
-        <h2>Campos existentes</h2>
-        <ul className="campos-lista">
-          {campos.map((campo) => (
-            <li key={campo.idCustomField}>
-              <div>
-                <strong className="truncate-label">{campo.label}</strong> ({campo.type}) {campo.required ? "*" : ""}
-              </div>
-              {permissions.includes('borrar_campo_dinamico') && 
-                <button className="icon-button" onClick={() => handleDelete(campo.idCustomField, campo.label)}>
-                  <FaTrashAlt className="campos-icons" />
-                </button>
-              }
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );

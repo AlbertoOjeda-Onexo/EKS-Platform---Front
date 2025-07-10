@@ -1,12 +1,27 @@
 .campos-container {
-  max-width: 100%;
+  width: 80vw;
   margin: 0 auto;
-  padding: 2rem;
+  padding-left: 2rem;
   color: #333;
-  display: flex; /* Cambiamos grid por flex */
-  justify-content: center; /* Esto distribuirá el espacio entre los elementos */
+  display: flex; 
+  flex-direction: column;
+  justify-content: center; 
   gap: 4rem;  
   align-items: flex-start;
+}
+
+.campos-content {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+}
+
+.campos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;    
+  border-bottom: 1px solid #ddd;
+  width: 100%;
 }
 
 .campos-container h3,
@@ -16,6 +31,11 @@
   font-size: 1.8rem;
   border-bottom: 2px solid #eaeaea;
   padding-bottom: 0.5rem;
+}
+
+.campos-container h1 {
+  color: #2859d3;
+  font-size: 1.8rem;
 }
 
 .campo-form {
@@ -137,6 +157,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: bottom;
+}
+
+.search-select {
+  display: block;
+  height: 50px;
+  width: 25%;  
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s;
 }
 
 

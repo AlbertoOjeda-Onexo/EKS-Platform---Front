@@ -169,7 +169,7 @@ export default function CrearCandidatoPage() {
             );
         }
         if (campo.type === "select") {
-            const opciones = campo.options.split(",").map((op) => op.trim());
+            const opciones = campo?.options?.split(",").map((op) => op.trim());
             return (
             <select
                 key={campo.idCustomField}
@@ -178,7 +178,7 @@ export default function CrearCandidatoPage() {
                 onChange={handleChange}
             >
                 <option value="">Seleccione {campo.label}</option>
-                {opciones.map((op, i) => (
+                {opciones?.map((op, i) => (
                 <option key={i} value={op}>
                     {op}
                 </option>
