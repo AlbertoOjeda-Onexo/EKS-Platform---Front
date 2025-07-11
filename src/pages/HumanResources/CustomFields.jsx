@@ -12,6 +12,7 @@ const tipoCampoOptions = [
   { value: "date", label: "Fecha" },
   { value: "boolean", label: "Booleano" },
   { value: "select", label: "Selección" },
+  { value: "file", label: 'Documento'}
 ];
 
 export default function CamposPersonalizadosPage() {

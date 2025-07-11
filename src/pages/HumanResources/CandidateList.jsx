@@ -12,11 +12,13 @@ import DetalleCandidato from "../../components/HumanResources/DetalleCandidato";
 
 export default function CandidatoPage() {
   const navigate = useNavigate();
-  const { permissions } = useUserStore();
+  const { permissions } = useUserStore();    
   const [candidatos, setCandidatos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [candidatoDetail, setCandidatoDetail] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);  
   const [openModalInfo, setOpenModalInfo] = useState(false);
+  const [openModalEvaluation, setOpenModalEvaluation] = useState(false);
+  const [candidatoDetail, setCandidatoDetail] = useState([]);
+  const [candidateEvaluation, setCandidateEvaluation] = useState('');
 
   const fetchCandidatos = async () => {
     try {
@@ -188,17 +190,54 @@ export default function CandidatoPage() {
     }
   };
 
+  const handleEvaluate = async (id) => {
+    setIsLoading(true);
+    try {
+      const generatedDescription = await api.get(`/humanResources/candidate/evaluate/${id}/`);
+      console.log('Generated Evaluation: ', generatedDescription.data.text);
+      setVacanteDetail(vacante);
+      setCandidateEvaluation(generatedDescription.data.text);
+      setOpenModalEvaluation(true);
+    } catch (error){
+        Swal.fire({
+            title: error.response.data.code,
+            text: error.response.data.detail,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2859d3',
+            showClass: {
+                popup: `
+                animate__animated
+                animate__fadeInUp
+                animate__faster
+                `
+            },
+            hideClass: {
+                popup: `
+                animate__animated
+                animate__fadeOutDown
+                animate__faster
+                `
+            }
+        })
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const renderAcciones = (candidato) => {
     const menu = (
       <Menu
         onClick={({ key }) => {
           if (key === "ver") handleViewDetail(candidato);                    
           if (key === 'aceptar') handleApprove(candidato.idCandidate);
+          if (key === "evaluar") handleEvaluate(candidato.idCandidate);
           if (key === "eliminar") handleDelete(candidato.idCandidate);
         }}
         items={[
           { label: "Ver", key: "ver" },           
-          permissions.includes('aceptar_candidato') && candidato.status !== 'aprobado' && { label: "Aceptar", key: "aceptar" },          
+          permissions.includes('aceptar_candidato') && candidato.status !== 'aprobado' && { label: "Aceptar", key: "aceptar" },  
+          permissions.includes('aceptar_candidato') && candidato.status == 'aprobado' && { label: "Evaluar", key: "evaluar" },        
           permissions.includes('eliminar_candidato') && { label: "Eliminar", key: "eliminar", danger: true }
         ]}
       />
@@ -249,6 +288,11 @@ export default function CandidatoPage() {
         </tbody>
       </table>
     </div>
+    <ModalInfo open={openModalEvaluation} onClose={() => setOpenModalEvaluation(false)} title={candidatoDetail.name + ' ' + candidatoDetail.firstSurName}>
+      <div className="modal-content">
+        <ReactMarkdown>{candidateEvaluation}</ReactMarkdown>
+      </div>
+    </ModalInfo>
     <ModalInfo open={openModalInfo} onClose={() => setOpenModalInfo(false)} title={candidatoDetail.name + ' ' + candidatoDetail.firstSurName}>
       <DetalleCandidato candidato={candidatoDetail} />
     </ModalInfo>
