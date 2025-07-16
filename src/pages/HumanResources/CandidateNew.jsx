@@ -12,6 +12,7 @@ export default function CrearCandidatoPage() {
     const { permissions } = useUserStore();
     const [campos, setCampos] = useState([]);
     const [vacantes, setVacantes] = useState([]);
+    const [archivos, setArchivos] = useState({});
     const [valores, setValores] = useState({
         name: "",
         firstSurName: "",
@@ -43,6 +44,16 @@ export default function CrearCandidatoPage() {
             ...valores,
             [name]: type === "checkbox" ?  checked : value
         });
+    };
+
+    const handleFileChange = (campoId, e) => {
+        const file = e.target.files[0];
+        setArchivos(prev => ({ ...prev, [campoId]: file }));
+                
+        setValores(prev => ({
+            ...prev,
+            [campoId]: file ? file.name : ''
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -129,7 +140,7 @@ export default function CrearCandidatoPage() {
             if (result.isConfirmed){
                 navigate('/candidatos');
             }                        
-        } catch (error) {
+        } catch (error) {            
             Swal.fire({
                 title: error.response.data.code,
                 text: error.response.data.detail,
@@ -157,44 +168,70 @@ export default function CrearCandidatoPage() {
     const renderCampo = (campo) => {
         if (campo.type === "boolean") {
             return (
-            <label key={campo.idCustomField}>
-                <input
-                type="checkbox"
-                name={campo.name}
-                checked={valores[campo.name] || false}
-                onChange={handleChange}
-                />
-                {campo.label}
-            </label>
+                <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                    <label key={campo.idCustomField}>
+                        <input
+                            type="checkbox"
+                            name={campo.name}
+                            checked={valores[campo.name] || false}
+                            onChange={handleChange}
+                        />
+                        {campo.label}
+                    </label>
+                </div>
             );
         }
+        
         if (campo.type === "select") {
             const opciones = campo?.options?.split(",").map((op) => op.trim());
             return (
-            <select
-                key={campo.idCustomField}
-                name={campo.name}
-                value={valores[campo.name] || ""}
-                onChange={handleChange}
-            >
-                <option value="">Seleccione {campo.label}</option>
-                {opciones?.map((op, i) => (
-                <option key={i} value={op}>
-                    {op}
-                </option>
-                ))}
-            </select>
+                <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                    <span>{campo.label}</span>
+                    <select
+                        key={campo.idCustomField}
+                        name={campo.name}
+                        value={valores[campo.name] || ""}
+                        onChange={handleChange}
+                    >
+                        <option value="">Seleccione {campo.label}</option>
+                        {opciones?.map((op, i) => (
+                            <option key={i} value={op}>
+                                {op}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             );
         }
+        
+        if (campo.type === "file") {
+            return (
+                <div key={campo.idCustomField} style={{display: 'flex', flexDirection: 'row', width: '30%'}}>                    
+                    <div>
+                        <span>{campo.label}</span>
+                        <input
+                            type="file"
+                            name={campo.name}
+                            onChange={(e) => handleFileChange(campo.name, e)}     
+                            accept=".pdf"                              
+                        />
+                    </div>
+                </div>
+            );
+        }
+        
         return (
-            <input
-            key={campo.idCustomField}
-            name={campo.name}
-            type={campo.type}
-            placeholder={campo.label}
-            value={valores[campo.name] || ""}
-            onChange={handleChange}            
-            />
+            <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                <span>{campo.label}</span>
+                <input
+                    key={campo.idCustomField}
+                    name={campo.name}
+                    type={campo.type}
+                    placeholder={campo.label}
+                    value={valores[campo.name] || ""}
+                    onChange={handleChange}            
+                />
+            </div>
         );
     };
 

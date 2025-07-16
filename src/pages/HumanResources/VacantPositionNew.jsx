@@ -33,13 +33,23 @@ export default function CrearVacantePage() {
         });
     };
 
+    const handleFileChange = (campoId, e) => {
+        const file = e.target.files[0];
+        setArchivos(prev => ({ ...prev, [campoId]: file }));
+                
+        setValores(prev => ({
+            ...prev,
+            [campoId]: file ? file.name : ''
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const camposBasicos = [
             { key: 'title', label: 'Título' },
             { key: 'description', label: 'Descripción' },
-            { key: 'date', label: 'Fecha Límite', type: 'date' }
+            { key: 'expire_date', label: 'Fecha Límite', type: 'date' }
         ];
         
         const esCampoVacio = (valor, tipo) => {
@@ -49,8 +59,9 @@ export default function CrearVacantePage() {
             return !valor;
         };
         
-        for (const campo of camposBasicos) {
+        for (const campo of camposBasicos) {            
             if (esCampoVacio(valores[campo.key], campo.type)) {
+                console.log(valores[campo.key], campo.type);
                 toast.error(`Por favor, ingresa el campo: ${campo.label}`);
                 return; 
             }
@@ -139,44 +150,70 @@ export default function CrearVacantePage() {
     const renderCampo = (campo) => {
         if (campo.type === "boolean") {
             return (
-            <label key={campo.idCustomField}>
-                <input
-                type="checkbox"
-                name={campo.name}
-                checked={valores[campo.name] || false}
-                onChange={handleChange}
-                />
-                {campo.label}
-            </label>
+                <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                    <label key={campo.idCustomField}>
+                        <input
+                            type="checkbox"
+                            name={campo.name}
+                            checked={valores[campo.name] || false}
+                            onChange={handleChange}
+                        />
+                        {campo.label}
+                    </label>
+                </div>
             );
         }
+        
         if (campo.type === "select") {
-            const opciones = campo.options.split(",").map((op) => op.trim());
+            const opciones = campo?.options?.split(",").map((op) => op.trim());
             return (
-            <select
-                key={campo.idCustomField}
-                name={campo.name}
-                value={valores[campo.name] || ""}
-                onChange={handleChange}
-            >
-                <option value="">Seleccione {campo.label}</option>
-                {opciones.map((op, i) => (
-                <option key={i} value={op}>
-                    {op}
-                </option>
-                ))}
-            </select>
+                <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                    <span>{campo.label}</span>
+                    <select
+                        key={campo.idCustomField}
+                        name={campo.name}
+                        value={valores[campo.name] || ""}
+                        onChange={handleChange}
+                    >
+                        <option value="">Seleccione {campo.label}</option>
+                        {opciones?.map((op, i) => (
+                            <option key={i} value={op}>
+                                {op}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             );
         }
+        
+        if (campo.type === "file") {
+            return (
+                <div key={campo.idCustomField} style={{display: 'flex', flexDirection: 'row', width: '30%'}}>                    
+                    <div>
+                        <span>{campo.label}</span>
+                        <input
+                            type="file"
+                            name={campo.name}
+                            onChange={(e) => handleFileChange(campo.name, e)}     
+                            accept=".pdf"                          
+                        />
+                    </div>
+                </div>
+            );
+        }
+        
         return (
-            <input
-            key={campo.idCustomField}
-            name={campo.name}
-            type={campo.type}
-            placeholder={campo.label}
-            value={valores[campo.name] || ""}
-            onChange={handleChange}            
-            />
+            <div style={{display: 'flex', flexDirection: 'column', width: '30%'}}>
+                <span>{campo.label}</span>
+                <input
+                    key={campo.idCustomField}
+                    name={campo.name}
+                    type={campo.type}
+                    placeholder={campo.label}
+                    value={valores[campo.name] || ""}
+                    onChange={handleChange}            
+                />
+            </div>
         );
     };
 
