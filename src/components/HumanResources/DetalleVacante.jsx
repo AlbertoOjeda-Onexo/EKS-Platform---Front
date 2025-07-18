@@ -36,7 +36,7 @@ export default function DetalleVacante({ vacante }) {
 
       <div className="campos-personalizados-scroll">
         <Descriptions bordered size="small" column={1}>
-          {vacante.valores_dinamicos?.map((campo) => (
+          {vacante.dynamic_values?.map((campo) => (
             <Descriptions.Item key={campo.fieldID} label={campo.fieldName}>
               {renderValor(campo.value)}
             </Descriptions.Item>

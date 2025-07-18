@@ -10,6 +10,7 @@ export default function CrearVacantePage() {
     const navigate = useNavigate();
     const { permissions } = useUserStore();
     const [campos, setCampos] = useState([]);
+    const [archivos, setArchivos] = useState({});
     const [valores, setValores] = useState({
         title: "",
         description: "",
@@ -59,9 +60,8 @@ export default function CrearVacantePage() {
             return !valor;
         };
         
-        for (const campo of camposBasicos) {            
+        for (const campo of camposBasicos) {
             if (esCampoVacio(valores[campo.key], campo.type)) {
-                console.log(valores[campo.key], campo.type);
                 toast.error(`Por favor, ingresa el campo: ${campo.label}`);
                 return; 
             }
@@ -74,30 +74,66 @@ export default function CrearVacantePage() {
             }
         }
 
+        const camposArchivoRequeridos = campos.filter(c => c.type === 'file' && c.required);
+        for (const campo of camposArchivoRequeridos) {
+            if (!archivos[campo.name]) {
+                toast.error(`Por favor, adjunta el archivo requerido: ${campo.label}`);
+                return;
+            }
+        }
+
         try {
+            const formData = new FormData();
 
-            const customFields = campos.map((campo) => {
-                const rawValue = valores[campo.name];
-                const value =
-                    campo.type === 'boolean'
-                    ? rawValue === true || rawValue === 'true' ? 'true' : 'false'
-                    : rawValue;
+            // Campos básicos
+            formData.append("title", valores.title);
+            formData.append("description", valores.description);
+            formData.append("expire_date", valores.expire_date);
+            formData.append("status", "pendiente");
 
-                return {
-                    field: campo.idCustomField,
-                    value: value
-                };
+            // Campos dinámicos (no archivos)
+            const dynamicFields = [];
+            campos.forEach((item) => {
+                if (item.type !== 'file') {
+                    const rawValue = valores[item.name];
+                    const value = item.type === "boolean"
+                        ? rawValue === true || rawValue === "true" ? "true" : "false"
+                        : rawValue;
+                    
+                    dynamicFields.push({
+                        field: item.idCustomField, 
+                        value: value
+                    });
+                }
             });
 
-            const payload = {
-                title: valores.title,
-                description: valores.description,
-                expire_date: valores.expire_date,
-                status: 'pendiente',
-                valores_dinamicos: customFields
-            };
+            formData.append("valores_dinamicos", JSON.stringify(dynamicFields));
+            
+            // Archivos y metadatos
+            const filesMetadata = [];
+            Object.entries(archivos).forEach(([campoName, archivo], index) => {
+                const campo = campos.find(c => c.name === campoName);
+                if (campo && archivo) {
+                    // Usamos un nombre único para cada archivo
+                    const fieldName = `file_${campo.idCustomField}`;
+                    formData.append(fieldName, archivo);
+                    
+                    filesMetadata.push({
+                        field: campo.idCustomField,
+                        filename: archivo.name,
+                        fieldName: fieldName  // Guardamos el nombre del campo para referencia
+                    });
+                }
+            });
 
-            const res = await api.post("/humanResources/vacant_position/", payload);
+            formData.append("files_metadata", JSON.stringify(filesMetadata));
+            
+            const res = await api.post("/humanResources/vacant_position/", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+
             const result = await Swal.fire({
                 title: 'Vacante creada',
                 text: 'La vacante fue agregada exitosamente.',
@@ -195,7 +231,7 @@ export default function CrearVacantePage() {
                             type="file"
                             name={campo.name}
                             onChange={(e) => handleFileChange(campo.name, e)}     
-                            accept=".pdf"                          
+                            accept=".pdf"                              
                         />
                     </div>
                 </div>
