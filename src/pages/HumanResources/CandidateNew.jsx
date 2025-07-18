@@ -91,31 +91,69 @@ export default function CrearCandidatoPage() {
             return;
         }
 
+        const camposArchivoRequeridos = campos.filter(c => c.type === 'file' && c.required);
+        for (const campo of camposArchivoRequeridos) {
+            if (!archivos[campo.name]) {
+                toast.error(`Por favor, adjunta el archivo requerido: ${campo.label}`);
+                return;
+            }
+        }
+
         try {
 
-            const customFields = campos.map((campo) => {
-                const rawValue = valores[campo.name];
-                const value =
-                    campo.type === 'boolean'
-                    ? rawValue === true || rawValue === 'true' ? 'true' : 'false'
-                    : rawValue;
+            const formData = new FormData();
 
-                return {
-                    field: campo.idCustomField,
-                    value: value
-                };
+            // Campos básicos
+            formData.append("name", valores.name);
+            formData.append("firstSurName", valores.firstSurName);
+            formData.append("secondSurName", valores.secondSurName);
+            formData.append("idVacantPosition", valores.idVacantPosition);
+            formData.append("status", "pendiente");
+
+            // Campos dinámicos (no archivos)
+            const dynamicFields = [];
+            campos.forEach((item) => {
+                if (item.type !== 'file') {
+                    const rawValue = valores[item.name];
+                    const value = item.type === "boolean"
+                        ? rawValue === true || rawValue === "true" ? "true" : "false"
+                        : rawValue;
+                    
+                    dynamicFields.push({
+                        field: item.idCustomField, 
+                        value: value
+                    });
+                }
+            });
+            formData.append("valores_dinamicos", JSON.stringify(dynamicFields));
+            
+            // Archivos y metadatos
+            const filesMetadata = [];
+            Object.entries(archivos).forEach(([campoName, archivo], index) => {
+                const campo = campos.find(c => c.name === campoName);
+                if (campo && archivo) {
+                    // Usamos un nombre único para cada archivo
+                    const fieldName = `file_${campo.idCustomField}`;
+                    formData.append(fieldName, archivo);
+                    
+                    filesMetadata.push({
+                        field: campo.idCustomField,
+                        filename: archivo.name,
+                        fieldName: fieldName  // Guardamos el nombre del campo para referencia
+                    });
+                }
             });
 
-            const payload = {
-                name: valores.name,
-                firstSurName: valores.firstSurName,
-                secondSurName: valores.secondSurName,
-                idVacantPosition: valores.idVacantPosition,
-                status: 'pendiente',
-                valores_dinamicos: customFields
-            };
+            formData.append("files_metadata", JSON.stringify(filesMetadata));
 
-            const res = await api.post("/humanResources/candidate/", payload);
+            console.log('formData: ', formData);            
+
+            const res = await api.post("/humanResources/candidate/", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+
             const result = await Swal.fire({
                 title: 'Candidato agregado',
                 text: 'El candidato fue registrado exitosamente.',
@@ -140,7 +178,8 @@ export default function CrearCandidatoPage() {
             if (result.isConfirmed){
                 navigate('/candidatos');
             }                        
-        } catch (error) {            
+        } catch (error) {    
+            console.log('error: ', error);        
             Swal.fire({
                 title: error.response.data.code,
                 text: error.response.data.detail,

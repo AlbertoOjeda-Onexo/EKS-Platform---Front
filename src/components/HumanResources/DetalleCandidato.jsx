@@ -36,7 +36,7 @@ export default function DetalleCandidato({ candidato }) {
 
       <div className="campos-personalizados-scroll">
         <Descriptions bordered size="small" column={1}>
-          {candidato.valores_dinamicos?.map((campo) => (
+          {candidato.dynamic_values?.map((campo) => (
             <Descriptions.Item key={campo.fieldID} label={campo.fieldName}>
               {renderValor(campo.value)}
             </Descriptions.Item>
