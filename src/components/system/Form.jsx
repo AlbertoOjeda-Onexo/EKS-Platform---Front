@@ -34,10 +34,11 @@ function Form({ route, method }) {
 
     const handleSubmit = async (e) => {
         setLoading(true);
+        localStorage.clear();
         e.preventDefault();
 
         try {
-            const res = await api.post(route, { userName, email, password })
+            const res = await api.post(route, { userName, email, password });            
             if (method === "login" && res.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access_token);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh_token);

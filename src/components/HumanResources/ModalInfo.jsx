@@ -20,7 +20,7 @@ export default function ModalInfo({ open, onClose, title, children }) {
       </div>
 
       <div className="modal-footer">
-        <Button onClick={onClose} className="modal-accept-button">
+        <Button onClick={onClose} className="modal-accept-button" style={{backgroundColor: '#2859d3'}}>
           Aceptar
         </Button>
       </div>
