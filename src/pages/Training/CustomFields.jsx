@@ -3,8 +3,8 @@ import { Select } from "antd";
 import Swal from "sweetalert2";
 import { FaTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import "../../styles/Training/CustomFields.css";
 import { useUserStore } from "../../store/userStore";
-import "../../styles/HumanResources/CustomFields.css";
 
 const tipoCampoOptions = [
   { value: "text", label: "Texto" },
@@ -17,7 +17,7 @@ const tipoCampoOptions = [
 
 export default function CamposPersonalizadosPage() {
   const [campos, setCampos] = useState([]);
-  const [formType, setFormType] = useState('vacant_position');
+  const [formType, setFormType] = useState('lesson');
   const { permissions } = useUserStore();
   const [nuevoCampo, setNuevoCampo] = useState({
     name: "",
@@ -29,7 +29,7 @@ export default function CamposPersonalizadosPage() {
 
   const fetchCampos = async () => {
     try {
-      const res = await api.get(`/humanResources/${formType}/custom_fields/`);
+      const res = await api.get(`/training/${formType}/custom_fields/`);
       setCampos(res.data);
     } catch (err) {
       console.error("Error al cargar campos personalizados", err);
@@ -48,7 +48,7 @@ export default function CamposPersonalizadosPage() {
     e.preventDefault();
     try {
       const payload = { ...nuevoCampo };      
-      const res = await api.post(`/humanResources/${formType}/custom_fields/`, payload); 
+      const res = await api.post(`/training/${formType}/custom_fields/`, payload); 
       Swal.fire({
           title: 'Campo creado',
           text: 'El campo fue agregado exitosamente.',
@@ -132,7 +132,7 @@ export default function CamposPersonalizadosPage() {
 
     if (result.isConfirmed) {      
       try {
-        await api.delete(`/humanResources/${formType}/custom_fields/${id}/delete/`);
+        await api.delete(`/training/${formType}/custom_fields/${id}/delete/`);
         Swal.fire({
             title: 'Campo eliminado.',
             text: 'El campo fue eliminado exitosamente',
@@ -195,15 +195,14 @@ export default function CamposPersonalizadosPage() {
   return (
     <div className="campos-container">
       <div className="campos-header">
-        <h1 style={{marginRight: '15px'}}>Formularios de Human Resources: </h1>
+        <h1 style={{marginRight: '15px'}}>Formularios de Training: </h1>
         <Select 
           value={formType}
           onChange={setFormType}
           style={{ width: 200 }}
           className="search-select"
           options={[
-            { value: "vacant_position", label: "Vacantes" },
-            { value: "candidate", label: "Candidatos" }
+            { value: "lesson", label: "Clases" },            
           ]}
         />
       </div>

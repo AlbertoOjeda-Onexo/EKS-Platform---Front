@@ -1,4 +1,3 @@
-import React from "react";
 import PrivateLayout from "../layouts/PrivateLayout";
 import ProtectedRoute from "../components/system/ProtectedRoute";
 import VacantPage from "../pages/HumanResources/VacantPositionList"
@@ -9,7 +8,7 @@ import CrearCandidatoPage from "../pages/HumanResources/CandidateNew";
 
 export const humanResourcesRoutes = [
   {
-    path: "/customFields",
+    path: "/customFields/vacantes",
     element: (
       <ProtectedRoute requiredPermission="ver_campos_dinamicos">
         <PrivateLayout>

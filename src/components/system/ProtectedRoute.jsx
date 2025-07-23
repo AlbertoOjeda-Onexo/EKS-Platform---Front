@@ -22,7 +22,7 @@ function ProtectedRoute({ children, requiredPermission = null }) {
         if (decodedRefresh.exp < now) return setIsAuthorized(false);
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}user/auth/refresh-token/`, {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/auth/refresh-token/`, {
                 refresh: refreshToken,
             });
             if (res.status === 200) {

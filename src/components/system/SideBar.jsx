@@ -3,6 +3,7 @@ import "../../styles/system/Sidebar.css";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../../store/userStore";
 import { useSidebarStore } from "../../store/sideBarStore";
+import { MdClass } from "react-icons/md";
 import { FaBars, FaUserCircle, FaClipboardList, FaAngleDown, FaBriefcase, FaFolderOpen } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -35,10 +36,9 @@ export default function Sidebar() {
               </>
             )}
           </div>
-
           {!collapsed && openSection === "capitalHumano" && (
             <div className="sidebar-subitems">
-              <Link to="/customFields" className="sidebar-subitem">
+              <Link to="/customFields/vacantes" className="sidebar-subitem">
                 <FaClipboardList style={{ marginRight: "6px" }}/>
                 <span>Formulario</span>
               </Link>
@@ -52,8 +52,30 @@ export default function Sidebar() {
               </Link>              
             </div>
           )}
-        </div>
-        
+          <div className="sidebar-item" onClick={() => toggleSection("capacitacion")}>
+            <MdClass />
+            {!collapsed && (
+              <>
+                <span style={{ marginRight: "6px" }}>Capacitación</span>
+                <FaAngleDown
+                  className={`dropdown-icon ${openSection === "capacitacion" ? "open" : ""}`}
+                />
+              </>
+            )}
+          </div>
+          {!collapsed && openSection === "capacitacion" && (
+            <div className="sidebar-subitems">
+              <Link to="/customFields/training" className="sidebar-subitem">
+                <FaClipboardList style={{ marginRight: "6px" }}/>
+                <span>Formulario</span>
+              </Link>   
+              <Link to="/clases" className="sidebar-subitem">
+                <FaFolderOpen style={{ marginRight: "6px" }}/>
+                <span>Clases</span>
+              </Link>          
+            </div>
+          )} 
+        </div>       
       </div>
 
       {user && (

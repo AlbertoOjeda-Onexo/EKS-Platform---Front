@@ -1,0 +1,273 @@
+.lesson-container {
+  width: 80vw;
+  margin: 0 auto;
+  padding-left: 2rem;
+  color: #333;
+}
+
+.lesson-header {
+  border-bottom: 2px solid #eaeaea;    
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  margin-bottom: 5vh;
+}
+
+.lesson-container button {
+  background-color: #2859d3;
+  color: white;
+  border: none;  
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: fit-content;  
+  height: fit-content;
+}
+
+.lesson-container h4,
+.lesson-container h3,
+.lesson-container h2 {
+  color: #2859d3;  
+  font-size: 1.8rem;
+  border-bottom: 2px solid #eaeaea;  
+}
+
+.lesson-container h1 {
+  color: #2859d3;  
+  font-size: 1.8rem;  
+}
+
+.lesson-form {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0rem; 
+}
+
+.lesson-form textarea,
+.lesson-form input{
+  display: block;
+  width: 25%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.lesson-form select {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.lesson-form input:focus,
+.lesson-form select:focus {
+  outline: none;
+  border-color: #2859d3;
+  box-shadow: 0 0 0 2px rgba(40, 89, 211, 0.2);
+}
+
+.lesson-form label {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin: 1rem 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lesson-form input[type="checkbox"] {
+  width: auto;
+  width: 100%;
+  margin-right: 0.5rem;
+  margin-bottom: 0;
+}
+
+.lesson-form button {
+  background-color: #2859d3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 30%;
+  margin-top: 0rem;
+}
+
+.lesson-form button:hover {
+  background-color: #1e4bb6;
+}
+
+.form-basicos {
+  display: flex;
+  gap: 1.5rem;  
+}
+
+.form-dinamicos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center; /* <--- centra los elementos horizontalmente */
+}
+
+
+.form-dinamicos input,
+.form-dinamicos select,
+.form-dinamicos textarea,
+.form-dinamicos label {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0rem;
+  background-color: #f9f9f9;
+  cursor: default;
+}
+
+.form-button:hover {
+  background-color: transparent !important;
+}
+
+.form-button button {
+  background-color: #2859d3;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-button button:hover {
+  background-color: #f9f9f9;
+  color: #2859d3;
+  border: 1px solid #2859d3;
+}
+
+/* Tabla contenedor */
+.lessons-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Encabezado */
+.lessons-table thead {
+  background-color: #2859d3;
+  color: #ffffff;
+}
+
+.lessons-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* Filas del cuerpo */
+.lessons-table td {
+  padding: 0.9rem 1rem;
+  font-size: 0.9rem;
+  color: #333333;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* Hover en filas */
+.lessons-table tbody tr:hover {
+  background-color: #f5f7fa;
+  cursor: pointer;
+}
+
+/* Alternar colores de fila */
+.lessons-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Estilo para el status si lo deseas dinámico */
+.lessons-table td:last-child {
+  font-weight: bold;
+}
+
+/* Base para todas las etiquetas */
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Colores según estado */
+.status-badge.pendiente {
+  background-color: #fff4cc;
+  color: #b38f00;
+  border: 1px solid #ffdf7e;
+}
+
+.status-badge.aprobado {
+  background-color: #d4f7d4;
+  color: #2b7a2b;
+  border: 1px solid #7dd87d;
+}
+
+.status-badge.rechazado {
+  background-color: #fce2e2;
+  color: #c0392b;
+  border: 1px solid #f5a6a6;
+}
+
+.ant-btn.button-dropdown {
+  color: #000;
+  height: 30px;
+  font-size: small;
+  background-color: #f9f9f9;  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.search-select {
+  display: block;
+  height: 50px;
+  width: 25%;  
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.modal-publishment-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 1rem;
+  line-height: 1.6;
+}
+
+.modal-publishment-content h1,
+.modal-publishment-content h2 {
+  margin-top: 1rem;
+}
+
+.modal-publishment-content p {
+  margin-bottom: 1rem;
+}
+
