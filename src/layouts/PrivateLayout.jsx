@@ -2,6 +2,7 @@ import Header from "../components/system/Header";
 import "../styles/system/PrivateLayout.css";
 import Sidebar from "../components/system/SideBar";
 import { useSidebarStore } from "../store/sideBarStore"; 
+import { ChatWidget } from "../components/system/ChatWidget";
 
 function PrivateLayout({ children }) {
   const isCollapsed = useSidebarStore((state) => state.collapsed); 
@@ -15,6 +16,7 @@ function PrivateLayout({ children }) {
           {children}
         </main>
       </div>
+      <ChatWidget/>
     </div>
   );
 }

@@ -1,0 +1,139 @@
+.chat-widget {
+  position: fixed;
+  bottom: 25px;
+  right: 20px;
+  z-index: 999;
+}
+
+.chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2859d3;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 999;
+
+  /* centrado del icono */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.chat-box {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  width: 400px;
+  height: 500px;
+  max-height: 500px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 999;
+}
+
+.chat-header {
+  background-color: #2859d3;
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+}
+
+.chat-messages {
+  padding: 12px;
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #f9f9f9;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  max-width: 80%;
+  line-height: 1.4;
+}
+
+.message.user {
+  background-color: #366fff;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.message.bot {
+  /* background-color: #027044; */
+  background: #7fa3ff;
+  align-self: flex-start;
+}
+
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 8px;
+  background: #fff;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.chat-input button {
+  background-color: #2859d3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.message.typing {
+  font-style: italic;
+  color: #999;
+}
+
+.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #555;
+  border-radius: 50%;
+  animation: blink 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}
+
